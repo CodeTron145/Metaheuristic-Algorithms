@@ -1,9 +1,5 @@
-import math
+import sys
 import tsplib95 as tsp
-
-def logCalc(x1,x2,y1,y2):
-    dist = math.sqrt(math.pow(x2-x1,2) + math.pow(y2-y1,2))
-    return dist
 
 def nearest_neighbour_finder(tsp_file, start_point):
     problem = tsp.load(tsp_file)
@@ -14,15 +10,12 @@ def nearest_neighbour_finder(tsp_file, start_point):
     tryRoute = [starting_point]
     temp = starting_point
     for i in range(1, len(list(problem.get_nodes()))):
-        min_dist = 10000
+        min_dist = sys.maxsize
         for j in range(1, len(list(problem.get_nodes())) + 1):
             exist = 0
             if temp == j:
                 continue
-            for k in range(0, len(tryRoute)):
-                if j == tryRoute[k]:
-                    exist = 1
-            if exist == 1:
+            if j in tryRoute:
                 continue
             edge = temp, j
             dist = problem.get_weight(*edge)
@@ -33,6 +26,18 @@ def nearest_neighbour_finder(tsp_file, start_point):
         tryRoute.append(min_id)
         temp = min_id
 
+    edge = min_id, starting_point
+    sum_dist += problem.get_weight(*edge)
+    tryRoute.append(starting_point)
+    return tryRoute
+
+def route_distance(tsp_file, route):
+    problem = tsp.load(tsp_file)
+    distance = 0
+    for i in range(1, len(route)):
+        edge = route[i-1], route[i]
+        distance += problem.get_weight(*edge)
+    return distance
     edge = min_id, starting_point
     sum_dist += problem.get_weight(*edge)
     tryRoute.append(starting_point)
