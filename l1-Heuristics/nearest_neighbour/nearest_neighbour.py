@@ -38,8 +38,3 @@ def route_distance(tsp_file, route):
         edge = route[i-1], route[i]
         distance += problem.get_weight(*edge)
     return distance
-    edge = min_id, starting_point
-    sum_dist += problem.get_weight(*edge)
-    tryRoute.append(starting_point)
-    return tryRoute, sum_dist
-
